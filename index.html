@@ -1,16 +1,64 @@
-<form id="commentForm">
-    <label for="grade">Grade:</label>
-    <input type="number" id="grade" name="grade" min="0" max="100" required>
-    
-    <label for="commentSelection">Select Comment:</label>
-    <select id="commentSelection" name="commentSelection">
-        <option value="default">Select Comment</option>
-        <option value="excellent">Excellent performance! Keep up the great work.</option>
-        <option value="good">Good job overall, but there's room for improvement.</option>
-        <option value="average">Work on improving your performance in certain areas.</option>
-        <option value="poor">Significant improvement is needed to meet expectations.</option>
-    </select>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h2>Generalized Comments</h2>
+    <button onclick="addUnit()">Add unit</button>
+    <div class="unit comments" id="units">
+        <div>
+            <h3>Unit</h3>
+            <div class="grade-comments">
+                <textarea id="grade1Comment" name="grade1Comment" rows="4" placeholder="Enter Grade 1 Comment"></textarea>
+            </div>
 
-    <button type="submit">Generate Comment</button>
-</form>
-<div id="commentOutput"></div>
+            <div class="grade-comments">
+                <textarea id="grade2Comment" name="grade2Comment" rows="4" placeholder="Enter Grade 2 Comment"></textarea>
+            </div>
+
+            <div class="grade-comments">
+                <textarea id="grade3Comment" name="grade3Comment" rows="4" placeholder="Enter Grade 3 Comment"></textarea>
+            </div>
+
+            <div class="grade-comments">
+                <textarea id="grade4Comment" name="grade4Comment" rows="4" placeholder="Enter Grade 4 Comment"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <form id="commentForm">
+        <h2>Unit Comments</h2>
+
+        <label for="studentName">Student Name:</label>
+        <input type="text" id="studentName" name="studentName">
+
+        <label for="pronoun">Pronouns:</label>
+        <select id="pronoun" name="pronoun" required>
+            <option value="he_him">He/Him</option>
+            <option value="she_her">She/Her</option>
+            <option value="they_them">They/Them</option>
+            <option value="custom">Custom</option>
+        </select>
+
+        <div class="unit-comment">
+            <label for="unit1Grade">Unit 1 Grade:</label>
+            <select id="unit1Grade" name="unit1Grade">
+                <option value="4">4 - Excellent</option>
+                <option value="3">3 - Good</option>
+                <option value="2">2 - Average</option>
+                <option value="1">1 - Poor</option>
+            </select>
+        </div>
+
+        <button type="submit">Generate Comment</button>
+    </form>
+
+    <div id="commentOutput"></div>
+
+</body>
+</html>
