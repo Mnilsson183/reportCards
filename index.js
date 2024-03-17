@@ -3,30 +3,33 @@ document.addEventListener('DOMContentLoaded', function() {
     writeCookieValue();
 });
 
+let units = 1;
+
 function addUnit() {
     const unitComments = document.getElementById('units');
+    units++;
 
     // Create a new section of unit comments
     const newUnit = document.createElement('div');
     newUnit.innerHTML = `
         <div>
-            <h3>Unit</h3>
+            <h3>Unit ${units}</h3>
             <div class="grade-comments">
-                <textarea id="grade1Comment" name="grade1Comment" rows="4" placeholder="Enter Grade 1 Comment"></textarea>
+                <textarea id="grade1Comment${units}" name="grade1Comment${units}" rows="4" placeholder="Enter Grade 1 Comment"></textarea>
             </div>
 
             <div class="grade-comments">
-                <textarea id="grade2Comment" name="grade2Comment" rows="4" placeholder="Enter Grade 2 Comment"></textarea>
+                <textarea id="grade2Comment${units}" name="grade2Comment${units}" rows="4" placeholder="Enter Grade 2 Comment"></textarea>
             </div>
 
             <div class="grade-comments">
-                <textarea id="grade3Comment" name="grade3Comment" rows="4" placeholder="Enter Grade 3 Comment"></textarea>
+                <textarea id="grade3Comment${units}" name="grade3Comment${units}" rows="4" placeholder="Enter Grade 3 Comment"></textarea>
             </div>
 
             <div class="grade-comments">
-                <textarea id="grade4Comment" name="grade4Comment" rows="4" placeholder="Enter Grade 4 Comment"></textarea>
+                <textarea id="grade4Comment${units}" name="grade4Comment${units}" rows="4" placeholder="Enter Grade 4 Comment"></textarea>
             </div>
-            <select id="unit1Grade" name="unit1Grade">
+            <select id="unit${units}Grade" name="unit${units}Grade">
                 <option value="4">4 - Excellent</option>
                 <option value="3">3 - Good</option>
                 <option value="2">2 - Average</option>
@@ -38,6 +41,7 @@ function addUnit() {
     // Append the new unit comments section to the container
     unitComments.appendChild(newUnit);
 }
+
 
 function getUnitComments() {
     const unitCommentsArray = [];
@@ -107,10 +111,10 @@ function compileComment() {
     comments = getUnitComments();
     let grades = [];
     const unitSections = document.querySelectorAll('.unit.comments');
-    console.log(unitSections[0].querySelector(`#unitGrade`).value);
+    console.log(unitSections[0].querySelector(`#unitGrade1`).value);
     unitSections.forEach((unitSection, index) => {
         // Get the value of the grade dropdown menu in this unit section
-        const gradeDropdown = unitSection.querySelector(`#unitGrade`);
+        const gradeDropdown = unitSection.querySelector(`#unitGrade${index + 1}`);
         if (gradeDropdown) {
             grades.push(gradeDropdown.value);
         }
