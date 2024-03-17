@@ -1,0 +1,16 @@
+<form id="commentForm">
+    <label for="grade">Grade:</label>
+    <input type="number" id="grade" name="grade" min="0" max="100" required>
+    
+    <label for="commentSelection">Select Comment:</label>
+    <select id="commentSelection" name="commentSelection">
+        <option value="default">Select Comment</option>
+        <option value="excellent">Excellent performance! Keep up the great work.</option>
+        <option value="good">Good job overall, but there's room for improvement.</option>
+        <option value="average">Work on improving your performance in certain areas.</option>
+        <option value="poor">Significant improvement is needed to meet expectations.</option>
+    </select>
+
+    <button type="submit">Generate Comment</button>
+</form>
+<div id="commentOutput"></div>
