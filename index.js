@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Call the get method on startup
-    getUnitComments();
+    writeCookieValue();
 });
 
 function addUnit() {
@@ -41,19 +41,15 @@ function getUnitComments() {
 
     // Loop through each unit section
     unitSections.forEach((unitSection, index) => {
-        const unitComments = [];
-
         // Retrieve comments from textareas within the unit section
         const commentTextareas = unitSection.querySelectorAll('.grade-comments textarea');
         commentTextareas.forEach(textarea => {
-            unitComments.push(textarea.value);
+            unitCommentsArray.push(textarea.value);
         });
 
-        // Push the object into the array
-        unitCommentsArray[index].push(unitComments);
     });
     // console.log(unitCommentsArray[0].comments.length);
-    // console.log(unitCommentsArray);
+    console.log(unitCommentsArray);
     return unitCommentsArray;
 }
 
@@ -65,7 +61,7 @@ function storeUnitComments(){
 }
 
 // Function to retrieve a cookie by name
-function getCookie(name) {
+function getCookie(name){
     const cookies = document.cookie.split(';');
     for (let cookie of cookies) {
         const [cookieName, cookieValue] = cookie.split('=');
@@ -79,5 +75,25 @@ function getCookie(name) {
 function writeCookieValue(){
     cookie = getCookie("unitComments");
     // if (cookie = "") return;
-    console.log(cookie);
+    cookie = JSON.parse(cookie)
+    console.log(cookie.length);
+    unitLength = parseInt(cookie.length/4)
+    for(let i = 1; i < unitLength; i++){
+        addUnit();
+    }
+
+    const unitSections = document.querySelectorAll('.unit.comments');
+    unitSections.forEach((unitSection, sectionIndex) => {
+    const commentTextareas = unitSection.querySelectorAll('.grade-comments textarea');
+    // Ensure the comment exists in the cookie array
+    if (sectionIndex < cookie.length) {;
+        cookie.forEach((comment, index) => {
+            // Ensure the textarea exists in the current unit section
+            if (index < commentTextareas.length) {
+                commentTextareas[index].value = comment;
+            }
+        });
+    }
+});
+
 }
