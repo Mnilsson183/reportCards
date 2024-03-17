@@ -34,7 +34,7 @@ function addUnit() {
 }
 
 function getUnitComments() {
-    const unitCommentsStructure = {};
+    const unitCommentsArray = [];
 
     // Retrieve all unit comments sections
     const unitSections = document.querySelectorAll('.unit.comments');
@@ -49,12 +49,14 @@ function getUnitComments() {
             unitComments.push(textarea.value);
         });
 
-        // Store the comments for the current unit section in the structure
-        unitCommentsStructure[`unit${index + 1}`] = unitComments;
+        // Push the object into the array
+        unitCommentsArray[index].push(unitComments);
     });
-    console.log(unitCommentsStructure);
-    return unitCommentsStructure;
+    // console.log(unitCommentsArray[0].comments.length);
+    // console.log(unitCommentsArray);
+    return unitCommentsArray;
 }
+
 
 function storeUnitComments(){
     unitCommentsStructure = getUnitComments();
@@ -72,4 +74,10 @@ function getCookie(name) {
         }
     }
     return '';
+}
+
+function writeCookieValue(){
+    cookie = getCookie("unitComments");
+    // if (cookie = "") return;
+    console.log(cookie);
 }
