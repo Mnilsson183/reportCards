@@ -11,7 +11,7 @@
     <h2>Generalized Comments</h2>
     <button onclick="addUnit()">Add unit</button>
     <div class="unit comments" id="units">
-        <div>
+        <div id="comments">
             <h3>Unit</h3>
             <div class="grade-comments">
                 <textarea id="grade1Comment" name="grade1Comment" rows="4" placeholder="Enter Grade 1 Comment"></textarea>
@@ -28,6 +28,12 @@
             <div class="grade-comments">
                 <textarea id="grade4Comment" name="grade4Comment" rows="4" placeholder="Enter Grade 4 Comment"></textarea>
             </div>
+            <select id="unitGrade" name="unitGrade">
+                <option value="4">4 - Excellent</option>
+                <option value="3">3 - Good</option>
+                <option value="2">2 - Average</option>
+                <option value="1">1 - Poor</option>
+            </select>
         </div>
     </div>
 
@@ -45,17 +51,7 @@
             <option value="custom">Custom</option>
         </select>
 
-        <div class="unit-comment">
-            <label for="unit1Grade">Unit 1 Grade:</label>
-            <select id="unit1Grade" name="unit1Grade">
-                <option value="4">4 - Excellent</option>
-                <option value="3">3 - Good</option>
-                <option value="2">2 - Average</option>
-                <option value="1">1 - Poor</option>
-            </select>
-        </div>
-
-        <button type="submit">Generate Comment</button>
+        <button type="submit" onclick="compileComment()">Generate Comment</button>
     </form>
 
     <div id="commentOutput"></div>

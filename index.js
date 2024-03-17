@@ -26,6 +26,12 @@ function addUnit() {
             <div class="grade-comments">
                 <textarea id="grade4Comment" name="grade4Comment" rows="4" placeholder="Enter Grade 4 Comment"></textarea>
             </div>
+            <select id="unit1Grade" name="unit1Grade">
+                <option value="4">4 - Excellent</option>
+                <option value="3">3 - Good</option>
+                <option value="2">2 - Average</option>
+                <option value="1">1 - Poor</option>
+            </select>
         </div>
     `;
 
@@ -48,8 +54,6 @@ function getUnitComments() {
         });
 
     });
-    // console.log(unitCommentsArray[0].comments.length);
-    console.log(unitCommentsArray);
     return unitCommentsArray;
 }
 
@@ -76,7 +80,6 @@ function writeCookieValue(){
     cookie = getCookie("unitComments");
     // if (cookie = "") return;
     cookie = JSON.parse(cookie)
-    console.log(cookie.length);
     unitLength = parseInt(cookie.length/4)
     for(let i = 1; i < unitLength; i++){
         addUnit();
@@ -94,6 +97,28 @@ function writeCookieValue(){
             }
         });
     }
-});
+});}
 
+function compileComment() {
+
+    const studentName = document.getElementById("studentName").value;
+    const pronoun = document.getElementById("pronoun").value;
+    let comment = "";
+    comments = getUnitComments();
+    let grades = [];
+    const unitSections = document.querySelectorAll('.unit.comments');
+    console.log(unitSections[0].querySelector(`#unitGrade`).value);
+    unitSections.forEach((unitSection, index) => {
+        // Get the value of the grade dropdown menu in this unit section
+        const gradeDropdown = unitSection.querySelector(`#unitGrade`);
+        if (gradeDropdown) {
+            grades.push(gradeDropdown.value);
+        }
+    });
+    console.log(studentName)
+    console.log(pronoun)
+    console.log(grades)
+
+    // Display the generated comment
+    document.getElementById("commentOutput").innerText = finalComment;
 }
