@@ -1,16 +1,16 @@
-.unit.comments {
+.unitComments {
     display: flex;
     flex-wrap: wrap;
 }
 
-.unit.comments > .unit {
+.unitComments > .unit {
     flex: 1 1 300px; /* Adjust width as needed */
     margin: 0 10px 10px 0; /* Add some margin between units */
     padding: 10px;
     box-sizing: border-box;
 }
 
-.unit.comments > .unit h3 {
+.unitComments > .unit h3 {
     margin-top: 0;
 }
 

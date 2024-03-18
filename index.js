@@ -1,21 +1,32 @@
 document.addEventListener('DOMContentLoaded', function () {
     writeCookieValue();
 });
+var units = 1;
 function addUnit() {
-    var unitComments = document.getElementById('units');
+    var unitComments = document.getElementById('unitComments');
+    units++;
     var newUnit = document.createElement('div');
-    newUnit.innerHTML = "\n        <div id=\"comment\" class=\"comment\">\n            <h3>Unit</h3>\n            <div class=\"grade-comments\">\n                <textarea id=\"grade1Comment\" name=\"grade1Comment\" rows=\"4\" placeholder=\"Enter Grade 1 Comment\"></textarea>\n            </div>\n\n            <div class=\"grade-comments\">\n                <textarea id=\"grade2Comment\" name=\"grade2Comment\" rows=\"4\" placeholder=\"Enter Grade 2 Comment\"></textarea>\n            </div>\n\n            <div class=\"grade-comments\">\n                <textarea id=\"grade3Comment\" name=\"grade3Comment\" rows=\"4\" placeholder=\"Enter Grade 3 Comment\"></textarea>\n            </div>\n\n            <div class=\"grade-comments\">\n                <textarea id=\"grade4Comment\" name=\"grade4Comment\" rows=\"4\" placeholder=\"Enter Grade 4 Comment\"></textarea>\n            </div>\n            <select id=\"unitGrade\" name=\"unitGrade\">\n                <option value=\"4\">4 - Excellent</option>\n                <option value=\"3\">3 - Good</option>\n                <option value=\"2\">2 - Average</option>\n                <option value=\"1\">1 - Poor</option>\n            </select>\n        </div>\n    ";
+    newUnit.innerHTML = "\n    <div id=\"comment\" class=\"comment\">\n        <h3>Unit 1</h3>\n        <div class=\"grade-comment\">\n            <textarea id=\"grade1Comment\" name=\"grade1Comment\" rows=\"4\" placeholder=\"Enter Grade 1 Comment\"></textarea>\n        </div>\n\n        <div class=\"grade-comment\">\n            <textarea id=\"grade2Comment\" name=\"grade2Comment\" rows=\"4\" placeholder=\"Enter Grade 2 Comment\"></textarea>\n        </div>\n\n        <div class=\"grade-comment\">\n            <textarea id=\"grade3Comment\" name=\"grade3Comment\" rows=\"4\" placeholder=\"Enter Grade 3 Comment\"></textarea>\n        </div>\n\n        <div class=\"grade-comment\">\n            <textarea id=\"grade4Comment\" name=\"grade4Comment\" rows=\"4\" placeholder=\"Enter Grade 4 Comment\"></textarea>\n        </div>\n        <select id=\"unitGrade\" name=\"unitGrade\" class=\"unitGrade\">\n            <option value=\"4\">4 - Excellent</option>\n            <option value=\"3\">3 - Good</option>\n            <option value=\"2\">2 - Average</option>\n            <option value=\"1\">1 - Poor</option>\n        </select>\n    </div>\n    ";
     if (unitComments != null) {
         unitComments.appendChild(newUnit);
     }
 }
 function getUnitComments() {
     var unitCommentsArray = [];
-    var unitSections = document.querySelectorAll('.unit.comments');
+    var unitCommentsDiv = document.getElementById('unitComments');
+    var unitSections;
+    if (unitCommentsDiv != null) {
+        unitSections = unitCommentsDiv.querySelectorAll('.comment');
+    }
+    else {
+        printToCommentOutput("error");
+    }
+    console.log(unitSections);
     unitSections.forEach(function (unitSection, index) {
-        var commentTextareas = unitSection.querySelectorAll('.grade-comments textarea');
+        var commentTextareas = unitSection.querySelectorAll('.grade-comment textarea');
         commentTextareas.forEach(function (textarea) {
             unitCommentsArray.push(textarea.value);
+            console.log(textarea.value);
         });
     });
     return unitCommentsArray;
@@ -83,23 +94,23 @@ function compileComment() {
     else {
         printToCommentOutput("gradesContainerDiv is null");
     }
-    if (gradesCommentDivs != null) {
-        gradesCommentDivs.array.forEach(function (element) {
-            var select = element.querySelector('select');
-            grades.push(select.value);
-        });
-    }
-    else {
-        printToCommentOutput("gradesCommentDivs is null");
+    console.log(gradesCommentDivs);
+    for (var i = 0; i < gradesCommentDivs.length; i++) {
+        var select = gradesCommentDivs[i].querySelector('select');
+        grades.push(parseInt(select.value));
     }
     console.log(studentName);
     console.log(pronoun);
     console.log(comments);
     console.log(grades);
     for (var i = 0; i < grades.length; i++) {
-        finalComment += comments[(i * 4) + grades[i]];
+        finalComment += comments[(i * 4) + grades[i] - 1];
     }
-    console.log(finalComment);
+    var substrings = pronoun.split("_");
+    console.log(substrings);
+    console.log(parseForNamesAndSuch(finalComment, substrings[0], substrings[1], studentName));
+}
+function parseForNamesAndSuch(comment, subject, possessive, name) {
 }
 function printToCommentOutput(text) {
     var commentOutput = document.getElementById("commentOutput");
