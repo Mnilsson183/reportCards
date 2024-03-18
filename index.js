@@ -1,128 +1,109 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Call the get method on startup
+document.addEventListener('DOMContentLoaded', function () {
     writeCookieValue();
 });
-
-let units = 1;
-
 function addUnit() {
-    const unitComments = document.getElementById('units');
-    units++;
-
-    // Create a new section of unit comments
-    const newUnit = document.createElement('div');
-    newUnit.innerHTML = `
-        <div>
-            <h3>Unit ${units}</h3>
-            <div class="grade-comments">
-                <textarea id="grade1Comment${units}" name="grade1Comment${units}" rows="4" placeholder="Enter Grade 1 Comment"></textarea>
-            </div>
-
-            <div class="grade-comments">
-                <textarea id="grade2Comment${units}" name="grade2Comment${units}" rows="4" placeholder="Enter Grade 2 Comment"></textarea>
-            </div>
-
-            <div class="grade-comments">
-                <textarea id="grade3Comment${units}" name="grade3Comment${units}" rows="4" placeholder="Enter Grade 3 Comment"></textarea>
-            </div>
-
-            <div class="grade-comments">
-                <textarea id="grade4Comment${units}" name="grade4Comment${units}" rows="4" placeholder="Enter Grade 4 Comment"></textarea>
-            </div>
-            <select id="unit${units}Grade" name="unit${units}Grade">
-                <option value="4">4 - Excellent</option>
-                <option value="3">3 - Good</option>
-                <option value="2">2 - Average</option>
-                <option value="1">1 - Poor</option>
-            </select>
-        </div>
-    `;
-
-    // Append the new unit comments section to the container
-    unitComments.appendChild(newUnit);
+    var unitComments = document.getElementById('units');
+    var newUnit = document.createElement('div');
+    newUnit.innerHTML = "\n        <div id=\"comment\" class=\"comment\">\n            <h3>Unit</h3>\n            <div class=\"grade-comments\">\n                <textarea id=\"grade1Comment\" name=\"grade1Comment\" rows=\"4\" placeholder=\"Enter Grade 1 Comment\"></textarea>\n            </div>\n\n            <div class=\"grade-comments\">\n                <textarea id=\"grade2Comment\" name=\"grade2Comment\" rows=\"4\" placeholder=\"Enter Grade 2 Comment\"></textarea>\n            </div>\n\n            <div class=\"grade-comments\">\n                <textarea id=\"grade3Comment\" name=\"grade3Comment\" rows=\"4\" placeholder=\"Enter Grade 3 Comment\"></textarea>\n            </div>\n\n            <div class=\"grade-comments\">\n                <textarea id=\"grade4Comment\" name=\"grade4Comment\" rows=\"4\" placeholder=\"Enter Grade 4 Comment\"></textarea>\n            </div>\n            <select id=\"unitGrade\" name=\"unitGrade\">\n                <option value=\"4\">4 - Excellent</option>\n                <option value=\"3\">3 - Good</option>\n                <option value=\"2\">2 - Average</option>\n                <option value=\"1\">1 - Poor</option>\n            </select>\n        </div>\n    ";
+    if (unitComments != null) {
+        unitComments.appendChild(newUnit);
+    }
 }
-
-
 function getUnitComments() {
-    const unitCommentsArray = [];
-
-    // Retrieve all unit comments sections
-    const unitSections = document.querySelectorAll('.unit.comments');
-
-    // Loop through each unit section
-    unitSections.forEach((unitSection, index) => {
-        // Retrieve comments from textareas within the unit section
-        const commentTextareas = unitSection.querySelectorAll('.grade-comments textarea');
-        commentTextareas.forEach(textarea => {
+    var unitCommentsArray = [];
+    var unitSections = document.querySelectorAll('.unit.comments');
+    unitSections.forEach(function (unitSection, index) {
+        var commentTextareas = unitSection.querySelectorAll('.grade-comments textarea');
+        commentTextareas.forEach(function (textarea) {
             unitCommentsArray.push(textarea.value);
         });
-
     });
     return unitCommentsArray;
 }
-
-
-function storeUnitComments(){
-    unitCommentsStructure = getUnitComments();
-    const unitCommentsJSON = JSON.stringify(unitCommentsStructure);
-    document.cookie = `unitComments=${unitCommentsJSON}; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/`;
+function storeUnitComments() {
+    var unitCommentsStructure = getUnitComments();
+    var unitCommentsJSON = JSON.stringify(unitCommentsStructure);
+    document.cookie = "unitComments=".concat(unitCommentsJSON, "; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/");
 }
-
 // Function to retrieve a cookie by name
-function getCookie(name){
-    const cookies = document.cookie.split(';');
-    for (let cookie of cookies) {
-        const [cookieName, cookieValue] = cookie.split('=');
+function getCookie(name) {
+    var cookies = document.cookie.split(';');
+    for (var _i = 0, cookies_1 = cookies; _i < cookies_1.length; _i++) {
+        var cookie = cookies_1[_i];
+        var _a = cookie.split('='), cookieName = _a[0], cookieValue = _a[1];
         if (cookieName.trim() === name) {
             return cookieValue;
         }
     }
     return '';
 }
-
-function writeCookieValue(){
-    cookie = getCookie("unitComments");
-    // if (cookie = "") return;
-    cookie = JSON.parse(cookie)
-    unitLength = parseInt(cookie.length/4)
-    for(let i = 1; i < unitLength; i++){
+function writeCookieValue() {
+    var cookieString = getCookie("unitComments");
+    var cookie;
+    if (cookieString != "") {
+        cookie = JSON.parse(cookieString);
+    }
+    else {
+        return false;
+    }
+    var unitLength = (cookie.length / 4) - (cookie.length % 4);
+    for (var i = 1; i < unitLength; i++) {
         addUnit();
     }
-
-    const unitSections = document.querySelectorAll('.unit.comments');
-    unitSections.forEach((unitSection, sectionIndex) => {
-    const commentTextareas = unitSection.querySelectorAll('.grade-comments textarea');
-    // Ensure the comment exists in the cookie array
-    if (sectionIndex < cookie.length) {;
-        cookie.forEach((comment, index) => {
-            // Ensure the textarea exists in the current unit section
-            if (index < commentTextareas.length) {
-                commentTextareas[index].value = comment;
-            }
-        });
-    }
-});}
-
-function compileComment() {
-
-    const studentName = document.getElementById("studentName").value;
-    const pronoun = document.getElementById("pronoun").value;
-    let comment = "";
-    comments = getUnitComments();
-    let grades = [];
-    const unitSections = document.querySelectorAll('.unit.comments');
-    console.log(unitSections[0].querySelector(`#unitGrade1`).value);
-    unitSections.forEach((unitSection, index) => {
-        // Get the value of the grade dropdown menu in this unit section
-        const gradeDropdown = unitSection.querySelector(`#unitGrade${index + 1}`);
-        if (gradeDropdown) {
-            grades.push(gradeDropdown.value);
+    var unitSections = document.querySelectorAll('.unit.comments');
+    unitSections.forEach(function (unitSection, sectionIndex) {
+        var commentTextareas = unitSection.querySelectorAll('.grade-comments textarea');
+        if (sectionIndex < cookie.length) {
+            ;
+            cookie.forEach(function (comment, index) {
+                if (index < commentTextareas.length) {
+                    commentTextareas[index].value = comment;
+                }
+            });
         }
     });
-    console.log(studentName)
-    console.log(pronoun)
-    console.log(grades)
-
-    // Display the generated comment
-    document.getElementById("commentOutput").innerText = finalComment;
+}
+function compileComment() {
+    var finalComment = "";
+    var studentNameObject = document.getElementById("studentName");
+    var pronounObject = document.getElementById("pronoun");
+    var studentName;
+    var pronoun;
+    if (studentNameObject != null && pronounObject != null) {
+        studentName = studentNameObject.value;
+        pronoun = pronounObject.value;
+    }
+    var comments = getUnitComments();
+    var gradesContainerDiv = document.getElementById('unitComments');
+    var gradesCommentDivs;
+    var grades = [];
+    if (gradesContainerDiv != null) {
+        gradesCommentDivs = gradesContainerDiv.querySelectorAll('.comment');
+    }
+    else {
+        printToCommentOutput("gradesContainerDiv is null");
+    }
+    if (gradesCommentDivs != null) {
+        gradesCommentDivs.array.forEach(function (element) {
+            var select = element.querySelector('select');
+            grades.push(select.value);
+        });
+    }
+    else {
+        printToCommentOutput("gradesCommentDivs is null");
+    }
+    console.log(studentName);
+    console.log(pronoun);
+    console.log(comments);
+    console.log(grades);
+    for (var i = 0; i < grades.length; i++) {
+        finalComment += comments[(i * 4) + grades[i]];
+    }
+    console.log(finalComment);
+}
+function printToCommentOutput(text) {
+    var commentOutput = document.getElementById("commentOutput");
+    if (commentOutput != null) {
+        commentOutput.innerText = text;
+    }
 }

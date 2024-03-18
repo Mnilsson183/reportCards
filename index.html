@@ -10,25 +10,25 @@
 <body>
     <h2>Generalized Comments</h2>
     <button onclick="addUnit()">Add unit</button>
-    <div class="unit comments" id="units">
-        <div id="comments1">
+    <div class="unitComments" id="unitComments">
+        <div id="comment" class="comment">
             <h3>Unit 1</h3>
-            <div class="grade-comments">
+            <div class="grade-comment">
                 <textarea id="grade1Comment" name="grade1Comment" rows="4" placeholder="Enter Grade 1 Comment"></textarea>
             </div>
 
-            <div class="grade-comments">
+            <div class="grade-comment">
                 <textarea id="grade2Comment" name="grade2Comment" rows="4" placeholder="Enter Grade 2 Comment"></textarea>
             </div>
 
-            <div class="grade-comments">
+            <div class="grade-comment">
                 <textarea id="grade3Comment" name="grade3Comment" rows="4" placeholder="Enter Grade 3 Comment"></textarea>
             </div>
 
-            <div class="grade-comments">
+            <div class="grade-comment">
                 <textarea id="grade4Comment" name="grade4Comment" rows="4" placeholder="Enter Grade 4 Comment"></textarea>
             </div>
-            <select id="unitGrade1" name="unitGrade">
+            <select id="unitGrade" name="unitGrade" class="unitGrade">
                 <option value="4">4 - Excellent</option>
                 <option value="3">3 - Good</option>
                 <option value="2">2 - Average</option>
@@ -37,11 +37,10 @@
         </div>
     </div>
 
-    <form id="commentForm">
         <h2>Unit Comments</h2>
 
         <label for="studentName">Student Name:</label>
-        <input type="text" id="studentName" name="studentName">
+        <input type="text" id="studentName" name="studentName" required>
 
         <label for="pronoun">Pronouns:</label>
         <select id="pronoun" name="pronoun" required>
@@ -51,8 +50,7 @@
             <option value="custom">Custom</option>
         </select>
 
-        <button type="submit" onclick="compileComment()">Generate Comment</button>
-    </form>
+        <button onclick="compileComment()">Generate Comment</button>
 
     <div id="commentOutput"></div>
 
