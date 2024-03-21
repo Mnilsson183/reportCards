@@ -1,10 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
     writeCookieValue();
 });
-var units = 1;
 function addUnit() {
     var unitComments = document.getElementById('unitComments');
-    units++;
     var newUnit = document.createElement('div');
     newUnit.innerHTML = "\n    <div id=\"comment\" class=\"comment\">\n        <h3>Unit 1</h3>\n        <div class=\"grade-comment\">\n            <textarea id=\"grade1Comment\" name=\"grade1Comment\" rows=\"4\" placeholder=\"Enter Grade 1 Comment\"></textarea>\n        </div>\n\n        <div class=\"grade-comment\">\n            <textarea id=\"grade2Comment\" name=\"grade2Comment\" rows=\"4\" placeholder=\"Enter Grade 2 Comment\"></textarea>\n        </div>\n\n        <div class=\"grade-comment\">\n            <textarea id=\"grade3Comment\" name=\"grade3Comment\" rows=\"4\" placeholder=\"Enter Grade 3 Comment\"></textarea>\n        </div>\n\n        <div class=\"grade-comment\">\n            <textarea id=\"grade4Comment\" name=\"grade4Comment\" rows=\"4\" placeholder=\"Enter Grade 4 Comment\"></textarea>\n        </div>\n        <select id=\"unitGrade\" name=\"unitGrade\" class=\"unitGrade\">\n            <option value=\"4\">4 - Excellent</option>\n            <option value=\"3\">3 - Good</option>\n            <option value=\"2\">2 - Average</option>\n            <option value=\"1\">1 - Poor</option>\n        </select>\n    </div>\n    ";
     if (unitComments != null) {
@@ -57,11 +55,12 @@ function writeCookieValue() {
     else {
         return false;
     }
+    console.log(cookie);
     var unitLength = (cookie.length / 4) - (cookie.length % 4);
     for (var i = 1; i < unitLength; i++) {
         addUnit();
     }
-    var unitSections = document.querySelectorAll('.unit.comments');
+    var unitSections = document.querySelectorAll('.unitComments.comments');
     unitSections.forEach(function (unitSection, sectionIndex) {
         var commentTextareas = unitSection.querySelectorAll('.grade-comments textarea');
         if (sectionIndex < cookie.length) {
@@ -104,13 +103,20 @@ function compileComment() {
     console.log(comments);
     console.log(grades);
     for (var i = 0; i < grades.length; i++) {
-        finalComment += comments[(i * 4) + grades[i] - 1];
+        finalComment += comments[(i * 4) + grades[i] - 1] + " ";
     }
     var substrings = pronoun.split("_");
     console.log(substrings);
-    console.log(parseForNamesAndSuch(finalComment, substrings[0], substrings[1], studentName));
+    printToCommentOutput(parseForNamesAndSuch(finalComment, substrings[0], substrings[1], studentName));
 }
 function parseForNamesAndSuch(comment, subject, possessive, name) {
+    /*
+        <name>, <subject>, <possessive>
+    */
+    return comment
+        .replace(/<name>/g, name)
+        .replace(/<subject>/g, subject)
+        .replace(/<possessive>/g, possessive);
 }
 function printToCommentOutput(text) {
     var commentOutput = document.getElementById("commentOutput");

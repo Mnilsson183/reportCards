@@ -4,8 +4,8 @@
 }
 
 .unitComments > .unit {
-    flex: 1 1 300px; /* Adjust width as needed */
-    margin: 0 10px 10px 0; /* Add some margin between units */
+    flex: 1 1 300px;
+    margin: 0 10px 10px 0;
     padding: 10px;
     box-sizing: border-box;
 }

@@ -37,20 +37,21 @@
         </div>
     </div>
 
-        <h2>Unit Comments</h2>
+    <button onclick="storeUnitComments()">Store the comment values</button>
+    <h2>Unit Comments</h2>
 
-        <label for="studentName">Student Name:</label>
-        <input type="text" id="studentName" name="studentName" required>
+    <label for="studentName">Student Name:</label>
+    <input type="text" id="studentName" name="studentName" required>
 
-        <label for="pronoun">Pronouns:</label>
-        <select id="pronoun" name="pronoun" required>
-            <option value="he_him">He/Him</option>
-            <option value="she_her">She/Her</option>
-            <option value="they_them">They/Them</option>
-            <option value="custom">Custom</option>
-        </select>
+    <label for="pronoun">Pronouns:</label>
+    <select id="pronoun" name="pronoun" required>
+        <option value="he_him">He/Him</option>
+        <option value="she_her">She/Her</option>
+        <option value="they_them">They/Them</option>
+        <option value="custom">Custom</option>
+    </select>
 
-        <button onclick="compileComment()">Generate Comment</button>
+    <button onclick="compileComment()">Generate Comment</button>
 
     <div id="commentOutput"></div>
 

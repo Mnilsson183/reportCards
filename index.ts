@@ -2,11 +2,8 @@ document.addEventListener('DOMContentLoaded', function() {
     writeCookieValue();
 });
 
-let units = 1;
-
 function addUnit() {
     const unitComments = document.getElementById('unitComments');
-    units++;
 
     const newUnit = document.createElement('div');
     newUnit.innerHTML = `
@@ -91,14 +88,16 @@ function writeCookieValue(){
     } else {
         return false;
     }
+    console.log(cookie)
     let unitLength = (cookie.length/4) - (cookie.length%4); 
     for(let i = 1; i < unitLength; i++){
         addUnit();
     }
 
-    const unitSections = document.querySelectorAll('.unit.comments');
+    const unitSections = document.querySelectorAll('.unitComments.comment');
     unitSections.forEach((unitSection, sectionIndex) => {
     const commentTextareas = unitSection.querySelectorAll('.grade-comments textarea') as NodeListOf<HTMLTextAreaElement>;
+    console.log(cookie);
     if (sectionIndex < cookie.length) {;
         cookie.forEach((comment, index) => {
             if (index < commentTextareas.length) {
@@ -139,17 +138,21 @@ function compileComment(): void{
     console.log(grades);
 
     for(let i : number = 0; i < grades.length; i++){
-        finalComment += comments[(i * 4) + grades[i] - 1];
+        finalComment += comments[(i * 4) + grades[i] - 1] + " ";
     }
     let substrings = pronoun.split("_");
     console.log(substrings);
-    console.log(parseForNamesAndSuch(finalComment, substrings[0], substrings[1], studentName));
+    printToCommentOutput(parseForNamesAndSuch(finalComment, substrings[0], substrings[1], studentName));
 }
 
-function parseForNamesAndSuch(comment:string, subject:string, possessive:string, name:string){
+function parseForNamesAndSuch(comment:string, subject:string, possessive:string, name:string) : string{
     /*
         <name>, <subject>, <possessive>
     */
+        return comment
+            .replace(/<name>/g, name)
+            .replace(/<subject>/g, subject)
+            .replace(/<possessive>/g, possessive);   
 }
 
 function printToCommentOutput(text : string){
