@@ -13,18 +13,16 @@ function getUnitComments() {
     var unitCommentsArray = [];
     var unitCommentsDiv = document.getElementById('unitComments');
     var unitSections;
-    if (unitCommentsDiv != null) {
+    if (unitCommentsDiv) {
         unitSections = unitCommentsDiv.querySelectorAll('.comment');
     }
-    else {
-        printToCommentOutput("error");
+    else
         return;
-    }
     console.log(unitSections);
     unitSections.forEach(function (unitSection, index) {
         var commentTextareas = unitSection.querySelectorAll('.grade-comment textarea');
         commentTextareas.forEach(function (textarea) {
-            unitCommentsArray.push(textarea.value);
+            unitCommentsArray.push(textarea.value.trim());
         });
     });
     return unitCommentsArray;
@@ -92,6 +90,8 @@ function compileComment() {
     var substrings = pronoun.split("_");
     var finalCommentString = "";
     for (var i = 0; i < grades.length; i++) {
+        if (!comments[(i * 4) + grades[i] - 1])
+            break;
         finalCommentArray.push(comments[(i * 4) + grades[i] - 1] + ". ");
         finalCommentArray[i] = parseForNamesAndSuch(finalCommentArray[i], substrings[0], substrings[1], studentName);
         finalCommentArray[i] = capitalizeFirstLetter(finalCommentArray[i]);
@@ -111,7 +111,6 @@ function parseForNamesAndSuch(comment, subject, possessive, name) {
 function capitalizeFirstLetter(inString) {
     return inString.charAt(0).toUpperCase() + inString.slice(1);
 }
-function isLetter(str) { return str.length === 1 && str.match(/[a-z]/i); }
 function printToCommentOutput(text) {
     var commentOutput = document.getElementById("commentOutput");
     if (commentOutput != null) {

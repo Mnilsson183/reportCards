@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function addUnit() {
     const unitComments = document.getElementById('unitComments');
-
     const newUnit = document.createElement('div');
     newUnit.innerHTML = `
     <div id="comment" class="comment">
@@ -32,7 +31,6 @@ function addUnit() {
         </select>
     </div>
     `;
-
     if(unitComments){
         unitComments.appendChild(newUnit);
     }
@@ -43,20 +41,16 @@ function getUnitComments() {
     let unitCommentsArray: string[] = [];
     const unitCommentsDiv = document.getElementById('unitComments')
     let unitSections;
-    if(unitCommentsDiv != null){
+    if(unitCommentsDiv){
         unitSections = unitCommentsDiv.querySelectorAll('.comment');
-    } else {
-        printToCommentOutput("error")
-        return;
-    }
+    } else return;
     console.log(unitSections)
 
     unitSections.forEach((unitSection, index) => {
         const commentTextareas = unitSection.querySelectorAll('.grade-comment textarea') as NodeListOf<HTMLTextAreaElement>;
         commentTextareas.forEach(textarea => {
-            unitCommentsArray.push(textarea.value);
+            unitCommentsArray.push(textarea.value.trim());
         });
-
     });
     return unitCommentsArray;
 }
@@ -124,6 +118,7 @@ function compileComment(): void{
     let substrings = pronoun.split("_");
     let finalCommentString = "";
     for(let i : number = 0; i < grades.length; i++){
+        if(!comments[(i*4)+grades[i]-1]) break;
         finalCommentArray.push(comments[(i * 4) + grades[i] - 1] + ". ");
         finalCommentArray[i] = parseForNamesAndSuch(finalCommentArray[i], substrings[0], substrings[1], studentName);
         finalCommentArray[i] = capitalizeFirstLetter(finalCommentArray[i]);
@@ -136,17 +131,15 @@ function parseForNamesAndSuch(comment:string, subject:string, possessive:string,
     /*
         <name>, <subject>, <possessive>
     */
-        return comment
-            .replace(/<name>/g, name)
-            .replace(/<subject>/g, subject)
-            .replace(/<possessive>/g, possessive);   
+    return comment
+        .replace(/<name>/g, name)
+        .replace(/<subject>/g, subject)
+        .replace(/<possessive>/g, possessive);   
 }
 
 function capitalizeFirstLetter(inString:string) {
     return inString.charAt(0).toUpperCase() + inString.slice(1);
 }
-
-function isLetter(str) { return str.length === 1 && str.match(/[a-z]/i)}
 
 function printToCommentOutput(text : string){
     let commentOutput = document.getElementById("commentOutput");
