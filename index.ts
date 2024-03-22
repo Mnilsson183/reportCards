@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    writeCookieValue();
+    writeLocalStorageValue();
 });
 
 function addUnit() {
@@ -33,7 +33,7 @@ function addUnit() {
     </div>
     `;
 
-    if(unitComments != null){
+    if(unitComments){
         unitComments.appendChild(newUnit);
     }
 }
@@ -47,6 +47,7 @@ function getUnitComments() {
         unitSections = unitCommentsDiv.querySelectorAll('.comment');
     } else {
         printToCommentOutput("error")
+        return;
     }
     console.log(unitSections)
 
@@ -54,7 +55,6 @@ function getUnitComments() {
         const commentTextareas = unitSection.querySelectorAll('.grade-comment textarea') as NodeListOf<HTMLTextAreaElement>;
         commentTextareas.forEach(textarea => {
             unitCommentsArray.push(textarea.value);
-            console.log(textarea.value);
         });
 
     });
@@ -65,50 +65,37 @@ function getUnitComments() {
 function storeUnitComments(){
     let unitCommentsStructure = getUnitComments();
     const unitCommentsJSON = JSON.stringify(unitCommentsStructure);
-    document.cookie = `unitComments=${unitCommentsJSON}; expires=Thu, 31 Dec 2099 23:59:59 UTC; path=/`;
+    localStorage.clear();
+    localStorage.setItem("unitComments", unitCommentsJSON);
 }
 
-// Function to retrieve a cookie by name
-function getCookie(name){
-    const cookies = document.cookie.split(';');
-    for (let cookie of cookies) {
-        const [cookieName, cookieValue] = cookie.split('=');
-        if (cookieName.trim() === name) {
-            return cookieValue;
-        }
-    }
-    return '';
-}
-
-function writeCookieValue(){
-    let cookieString = getCookie("unitComments");
-    let cookie;
-    if (cookieString != ""){
-        cookie = JSON.parse(cookieString);
-    } else {
-        return false;
-    }
-    console.log(cookie)
-    let unitLength = (cookie.length/4) - (cookie.length%4); 
+function writeLocalStorageValue(){
+    const local = localStorage.getItem("unitComments");
+    if(!local) return;
+    const localStorageValue = JSON.parse(local);
+    if(!localStorageValue) return;
+    let unitLength = (localStorageValue.length/4) - (localStorageValue.length%4); 
     for(let i = 1; i < unitLength; i++){
         addUnit();
     }
-
-    const unitSections = document.querySelectorAll('.unitComments.comment');
+    const unitElement = document.getElementById('unitComments');
+    if(!unitElement) return;
+    const unitSections = unitElement.querySelectorAll('.comment');
+    if(!unitSections) return;
+    let unitSectionTextAreaArray: HTMLTextAreaElement[] = [];
     unitSections.forEach((unitSection, sectionIndex) => {
-    const commentTextareas = unitSection.querySelectorAll('.grade-comments textarea') as NodeListOf<HTMLTextAreaElement>;
-    console.log(cookie);
-    if (sectionIndex < cookie.length) {;
-        cookie.forEach((comment, index) => {
-            if (index < commentTextareas.length) {
-                commentTextareas[index].value = comment;
-            }
-        });
+        const unitSections = unitSection.querySelectorAll('.grade-comment textarea') as NodeListOf<HTMLTextAreaElement>;
+        unitSections.forEach(element => {
+            unitSectionTextAreaArray.push(element);
+        })
+
+    });
+    for(let i = 0; i < localStorageValue.length; i++){
+        unitSectionTextAreaArray[i].value = localStorageValue[i];
     }
-});}
+}
 
 function compileComment(): void{
-    let finalComment = "";
     const studentNameObject = <HTMLInputElement>document.getElementById("studentName");
     const pronounObject = <HTMLInputElement>document.getElementById("pronoun");
     let studentName;
@@ -118,6 +105,7 @@ function compileComment(): void{
         pronoun = pronounObject.value;
     }
     let comments = getUnitComments();
+    if(!comments) return;
 
     const gradesContainerDiv = document.getElementById('unitComments');
     let gradesCommentDivs;
@@ -127,22 +115,21 @@ function compileComment(): void{
     } else {
         printToCommentOutput("gradesContainerDiv is null");
     }
-    console.log(gradesCommentDivs);
     for(let i : number = 0; i < gradesCommentDivs.length; i++){
         const select = gradesCommentDivs[i].querySelector('select');
         grades.push(parseInt(select.value));
     }
-    console.log(studentName);
-    console.log(pronoun);
-    console.log(comments);
-    console.log(grades);
 
-    for(let i : number = 0; i < grades.length; i++){
-        finalComment += comments[(i * 4) + grades[i] - 1] + " ";
-    }
+    let finalCommentArray:string[] = [];
     let substrings = pronoun.split("_");
-    console.log(substrings);
-    printToCommentOutput(parseForNamesAndSuch(finalComment, substrings[0], substrings[1], studentName));
+    let finalCommentString = "";
+    for(let i : number = 0; i < grades.length; i++){
+        finalCommentArray.push(comments[(i * 4) + grades[i] - 1] + ". ");
+        finalCommentArray[i] = parseForNamesAndSuch(finalCommentArray[i], substrings[0], substrings[1], studentName);
+        finalCommentArray[i] = capitalizeFirstLetter(finalCommentArray[i]);
+        finalCommentString += finalCommentArray[i];
+    }
+    printToCommentOutput(finalCommentString);
 }
 
 function parseForNamesAndSuch(comment:string, subject:string, possessive:string, name:string) : string{
@@ -154,6 +141,12 @@ function parseForNamesAndSuch(comment:string, subject:string, possessive:string,
             .replace(/<subject>/g, subject)
             .replace(/<possessive>/g, possessive);   
 }
+
+function capitalizeFirstLetter(inString:string) {
+    return inString.charAt(0).toUpperCase() + inString.slice(1);
+}
+
+function isLetter(str) { return str.length === 1 && str.match(/[a-z]/i)}
 
 function printToCommentOutput(text : string){
     let commentOutput = document.getElementById("commentOutput");
